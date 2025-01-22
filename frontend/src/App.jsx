@@ -1,10 +1,22 @@
 import "./App.css";
+import { Routes, Route } from "react-router-dom";
+
+// Pages
+import LoginPage from "./Pages/LoginPage";
+import SigninPage from "./Pages/SigninPage";
+import HomePage from "./Pages/HomePage";
+import SharePage from "./Pages/SharePage";
+import SuccessPage from "./Pages/SuccessPage";
 
 function App() {
   return (
-    <>
-      <div className="font-bold text-red-600">HII</div>
-    </>
+    <Routes>
+      <Route path="/" element={<LoginPage />}></Route>
+      <Route path="/home/:id" element={<HomePage />}></Route>
+      <Route path="/signin" element={<SigninPage />}></Route>
+      <Route path="/success" element={<SuccessPage />}></Route>
+      <Route path="/share/:id" element={<SharePage />}></Route>
+    </Routes>
   );
 }
 

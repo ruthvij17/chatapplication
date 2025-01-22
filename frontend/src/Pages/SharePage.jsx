@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
+import DefaultLayout from "../Layouts/DefaultLayout";
 
 const SharePage = () => {
-  return (
-    <div>SharePage</div>
-  )
-}
+  return <div>SharePage</div>;
+};
 
-export default SharePage
+export default DefaultLayout(SharePage);
