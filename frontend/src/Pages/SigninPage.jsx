@@ -12,6 +12,8 @@ const SigninPage = () => {
     // console.log(email, password);
     setEmail("");
     setPassword("");
+    setName("");
+    setCpassword("");
   };
 
   return (
@@ -60,7 +62,7 @@ const SigninPage = () => {
             <input
               value={cpassword}
               onChange={(e) => {
-                setCPassword(e.target.value);
+                setCpassword(e.target.value);
               }}
               required
               type="password"
