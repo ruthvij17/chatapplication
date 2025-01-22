@@ -8,7 +8,7 @@ const NavbarComponent = () => {
     <>
       <div className="absolute left-0 h-screen w-[100px] flex items-center flex-col p-2">
         <div className="rounded-full w-[70px] h-[70px]">
-          <img src={MyImage} alt="Logo" className="" />
+          <img src={MyImage} alt="Logo" className="scale-150" />
         </div>
 
         <div class="text-2xl font-bold  flex flex-col items-center">
