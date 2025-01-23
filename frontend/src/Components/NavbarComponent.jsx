@@ -6,7 +6,7 @@ import MyImage from "../Images/chatLOGO-removebg-preview.png";
 const NavbarComponent = () => {
   return (
     <>
-      <div className="absolute left-0 h-screen w-[100px] flex items-center flex-col p-2">
+      <div className="absolute left-0 h-screen w-[100px] flex items-center flex-col p-2 ">
         <div className="rounded-full w-[70px] h-[70px]">
           <img src={MyImage} alt="Logo" className="scale-150" />
         </div>

@@ -1,9 +1,23 @@
-import React from 'react'
+import React from "react";
 
-const MessagesComponent = () => {
+const MessagesComponent = (props) => {
+  const message = props.message;
   return (
-    <div>MessagesComponent</div>
-  )
-}
+    <div
+      className={`${message.type === "send" ? "flex flex-col items-end" : ""} `}
+    >
+      <div
+        className={`${
+          message.type === "send"
+            ? "bg-[rgb(68,68,173)] "
+            : "bg-[rgb(107,107,131)] "
+        } rounded-xl p-1 px-2 w-fit text-white max-w-[50%]`}
+      >
+        {message.content}
+      </div>
+    </div>
+  );
+};
 
-export default MessagesComponent
+export default MessagesComponent;
+// bg - ;

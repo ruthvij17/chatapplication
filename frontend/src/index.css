@@ -4,6 +4,9 @@
 
 body {
   background-color: rgba(0, 12, 10, 0.986);
+  height: 100vh;
+  margin: 0; /* Optional: Removes default body margin */
+  overflow: hidden;
 }
 
 #scroll::-webkit-scrollbar {
