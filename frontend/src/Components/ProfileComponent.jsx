@@ -2,14 +2,14 @@ import React from "react";
 const ProfileComponent = () => {
   return (
     <>
-      <div className="h-[50%] w-[240px] bg-white mt-3 mr-1 rounded-3xl flex flex-col overflow-hidden">
+      <div className="h-[50%] w-[18vw]  bg-white mt-3 rounded-3xl flex flex-col overflow-hidden">
         <div
           className="h-[70%] flex items-center justify-center"
           style={{
             background: "radial-gradient(circle, #a2c2e6, #e1c6f2)", // Teal to Peachy Pink Radial Gradient
           }}
         >
-          <div className="h-[65%] w-[65%] rounded-full bg-white flex items-center justify-center text-8xl font-serif text-blue-900">
+          <div className="h-[160px] w-[160px] rounded-full bg-white flex items-center justify-center text-8xl font-serif text-blue-900">
             C
           </div>
         </div>

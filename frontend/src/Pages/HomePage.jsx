@@ -6,7 +6,7 @@ import ChatComponent from "../Components/ChatComponent";
 const HomePage = () => {
   return (
     <>
-      <div className="ml-[100px] p-5 bg-white rounded-3xl m-3 w-[73%] h-[95vh] flex flex-row">
+      <div className="ml-[80px] p-5 bg-white rounded-3xl m-3 w-[75%] h-[97vh] flex flex-row">
         <RecipientsComponents />
         <ChatComponent />
       </div>
