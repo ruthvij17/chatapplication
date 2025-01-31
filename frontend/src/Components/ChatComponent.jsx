@@ -46,7 +46,10 @@ const ChatComponent = () => {
               <MenuButton>
                 <GiHamburgerMenu className="text-2xl" />
               </MenuButton>
-              <MenuItems anchor="bottom" className="bg-white p-3 shadow-md rounded-lg">
+              <MenuItems
+                anchor="bottom"
+                className="bg-white p-3 shadow-md rounded-lg"
+              >
                 <MenuItem>
                   <a
                     className="block data-[focus]:bg-blue-100"
@@ -71,15 +74,15 @@ const ChatComponent = () => {
         </div>
         <hr />
 
-        <div
-          className="h-full w-full relative"
-          style={{
-            backgroundImage: `url('${MyImage}')`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          <div className="h-full w-full pt-5 pb-9 flex flex-col gap-2">
+        <div className="h-full w-full relative">
+          <div
+            className="h-full w-full pt-5 pb-9 flex flex-col gap-2"
+            style={{
+              backgroundImage: `url('${MyImage}')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          >
             {messages.map((ele) => {
               return <MessagesComponent message={ele} />;
             })}
