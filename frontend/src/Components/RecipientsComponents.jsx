@@ -88,12 +88,15 @@ const RecipientsComponents = () => {
           id="scroll"
         >
           {/*  */}
-          {recipients.map((ele) => {
+          {recipients.map((ele, index) => {
             if (i == 15) {
               i = 0;
             }
             return (
-              <div className="flex flex-row  bg-[rgba(220,220,220,0.5)] rounded-lg p-1 items-center">
+              <div
+                className="flex flex-row bg-[rgba(220,220,220,0.5)] rounded-lg p-1 items-center shadow-sm shadow-gray-800"
+                key={index}
+              >
                 <div
                   className="w-[40px] h-[40px] rounded-lg flex items-center justify-center"
                   style={{ backgroundColor: colors[i++] }}

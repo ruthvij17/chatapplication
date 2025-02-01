@@ -11,7 +11,7 @@ const NavbarComponent = () => {
           <img src={MyImage} alt="Logo" className="scale-150" />
         </div>
 
-        <div class="text-2xl font-bold w-6 text-center h-[75%] break-words bg-gradient-to-r from-white to-black bg-clip-text text-transparent">
+        <div className="text-2xl font-bold w-6 text-center h-[75%] break-words bg-gradient-to-r from-white to-black bg-clip-text text-transparent">
           CHATMATE
         </div>
         <div className="text-3xl text-white h-[20%]">
