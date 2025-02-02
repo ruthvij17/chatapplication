@@ -18,10 +18,12 @@ const userSchema = mongoose.Schema(
     recipients: {
       type: [mongoose.Schema.Types.ObjectId],
       required: false,
+      ref: "Users",
     },
     messages: {
       type: [mongoose.Schema.Types.ObjectId],
       required: false,
+      ref: "Messages",
     },
   },
   {
