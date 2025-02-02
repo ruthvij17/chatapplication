@@ -55,6 +55,39 @@ app.get("/login", async (req, res) => {
   });
 });
 
+// add recipients
+app.put("/add/recipient/:id", async (req, res) => {
+  const { id } = req.params;
+  const { email } = req.body;
+
+  const recipientId = await UserModel.findOne({ email: email }).select("_id");
+  // console.log(recipientId._id);
+  if (!recipientId) {
+    return res.status(400).json({
+      success: false,
+      message: "Recipient not found",
+    });
+  }
+
+  await UserModel.updateOne(
+    { _id: id },
+    { $addToSet: { recipients: recipientId._id } }
+  );
+  await UserModel.updateOne(
+    { _id: recipientId },
+    { $addToSet: { recipients: id } }
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: "Recipient added",
+    data: await UserModel.find(),
+  });
+});
+
+// Get all recipients
+app.get("/get/recipients/:id", async (req, res) => {});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
