@@ -1,9 +1,25 @@
 const express = require("express");
 const dbConnection = require("./dbconnection");
 const UserModel = require("./Models/UserModel");
+const MessageModel = require("./Models/MessageModel");
 const dotenv = require("dotenv").config();
+const http = require("http");
+const socketIo = require("socket.io");
 
 const app = express();
+const server = http.createServer(app);
+const chatIo = socketIo(server, {
+  cors: {
+    origin: "*", // Allow all origins (you can replace "*" with specific domains like "http://localhost:3000")
+    methods: ["GET", "POST"],
+  },
+  path: "/socket/chat", // This is the custom path
+});
+
+const shareIo = socketIo(server, {
+  path: "/socket/share", // This is the custom path
+});
+
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
@@ -102,9 +118,84 @@ app.put("/add/recipient/:id", async (req, res) => {
 });
 
 // Get all recipients
-app.get("/get/recipients/:id", async (req, res) => {});
+app.get("/get/recipients/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const userData = await UserModel.findById(id, "recipients").populate(
+      "recipients",
+      "name"
+    );
+
+    if (!userData) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // const data = await Promise.all(
+    //   userData.recipients.map(async (ele) => {
+    //     const user = await UserModel.findOne({ _id: ele }, "name");
+    //     return user;
+    //   })
+    // );
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: "Recipients are",
+        data: userData.recipients,
+      });
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+// Chat socket
+chatIo.on("connection", (socket) => {
+  console.log("A user connected");
+  let id, rid;
+
+  socket.on("init", (msg) => {
+    id = msg.id;
+    rid = msg.rid;
+  });
+
+  // Listen for a custom event from the client
+  socket.on("chat message", (msg) => {
+    console.log("Message received: " + msg);
+    chatIo.emit("chat message", msg); // Broadcast to all clients
+  });
+
+  socket.on("message", async (message) => {
+    console.log(message);
+
+    const newMessage = await MessageModel.create({
+      sender: id,
+      receiver: rid,
+      time: message.date,
+      content: message.msg,
+    });
+    // Add the message reference to the sender and receiver's messages array
+    await UserModel.findByIdAndUpdate(id, {
+      $push: { messages: newMessage._id },
+    });
+    await UserModel.findByIdAndUpdate(rid, {
+      $push: { messages: newMessage._id },
+    });
+    // let userWithMessages = await UserModel.findById(id) // Find the user by ID
+    //   .populate("messages");
+
+    // console.log(userWithMessages);
+
+    chatIo.emit("chat" + rid, message);
+  });
+
+  // Handle disconnection
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+  });
+});
 
 // Start the server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
