@@ -7,7 +7,7 @@ const MessagesComponent = (props) => {
     <>
       {date ? (
         <div className="text-[13px] grid place-content-center">
-          <span className="px-1 bg-sky-300 rounded text-white">
+          <span className="p-2 bg-white rounded text-black">
             {new Date(message.date).toLocaleDateString("en-US", {
               year: "numeric",
               month: "short",
