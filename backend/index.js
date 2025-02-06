@@ -176,7 +176,7 @@ app.get("/get/messages", async (req, res) => {
         { sender: id, receiver: rid },
         { sender: rid, receiver: id },
       ],
-    });
+    }).select("sender receiver time content");
     if (!data) {
       return res
         .status(400)
@@ -198,6 +198,7 @@ chatIo.on("connection", (socket) => {
   console.log("A user connected");
   const id = socket.handshake.query.id;
   const rid = socket.handshake.query.rid;
+  console.log(id, " and ", rid);
 
   socket.on("chat message", (msg) => {
     console.log("Message received: " + msg);
