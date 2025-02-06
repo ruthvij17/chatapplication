@@ -1,13 +1,27 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    // console.log(email, password);
+    try {
+      const response = await axios.post("/login", {
+        email: email,
+        password: password,
+      });
+      if (response.status == 200) {
+        navigate(`/home/${response.data.user._id}`, {
+          state: { data: response.data.user },
+        });
+      } else alert(response.data.message);
+    } catch (error) {
+      alert("Error occurred during login");
+    }
     setEmail("");
     setPassword("");
   };

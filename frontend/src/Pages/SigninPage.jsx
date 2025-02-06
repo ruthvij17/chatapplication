@@ -1,15 +1,34 @@
+import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SigninPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [cpassword, setCpassword] = useState("");
+  const navigate = useNavigate();
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    // console.log(email, password);
+    if (password !== cpassword) {
+      alert("Password must be same");
+      return;
+    }
+
+    try {
+      const response = await axios.post("/sign-in", { email, password, name });
+      if (response.status == 200) {
+        navigate(`/`);
+      } else {
+        console.log(response.data.message);
+        alert(response.data.message);
+        return;
+      }
+    } catch (error) {
+      alert("Error occured during sign-in");
+    }
+
     setEmail("");
     setPassword("");
     setName("");

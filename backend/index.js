@@ -5,6 +5,7 @@ const MessageModel = require("./Models/MessageModel");
 const dotenv = require("dotenv").config();
 const http = require("http");
 const socketIo = require("socket.io");
+const cors = require("cors");
 
 const app = express();
 const server = http.createServer(app);
@@ -25,6 +26,7 @@ const shareIo = socketIo(server, {
 });
 
 app.use(express.json());
+app.use(cors());
 const PORT = process.env.PORT || 3000;
 
 dbConnection();
@@ -44,19 +46,17 @@ app.post("/sign-in", async (req, res) => {
     const { name, email, password } = req.body;
     const users = await UserModel.findOne({ email });
     if (users) {
-      return res.status(400).json({
+      return res.status(201).json({
         success: false,
         message: "User already exist",
       });
     }
 
     await UserModel.create({ name, email, password });
-    const data = await UserModel.find();
 
     return res.status(200).json({
       success: true,
       message: "User added successfully",
-      data: data,
     });
   } catch (error) {
     console.log(error.message);
@@ -64,15 +64,15 @@ app.post("/sign-in", async (req, res) => {
 });
 
 // Login
-app.get("/login", async (req, res) => {
+app.post("/login", async (req, res) => {
   try {
+    console.log("login");
+
     const { email, password } = req.body;
-    const user = await UserModel.findOne({ email, password }).select(
-      "name email"
-    );
+    const user = await UserModel.findOne({ email, password }).select("_id");
 
     if (!user) {
-      return res.status(400).json({
+      return res.status(201).json({
         success: false,
         message: "Invalid credencials",
       });
@@ -80,11 +80,28 @@ app.get("/login", async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "User found",
-      data: user,
+      user,
     });
   } catch (error) {
     console.log(error.message);
   }
+});
+
+//
+app.get("/get/profile/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log("profile");
+
+  const user = await UserModel.findById(id).select("name email");
+  if (!user) {
+    return res.status(201).json({ success: false, message: "Not found" });
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "User Details",
+    user,
+  });
 });
 
 // add recipients
@@ -96,7 +113,7 @@ app.put("/add/recipient/:id", async (req, res) => {
     const recipientId = await UserModel.findOne({ email: email }).select("_id");
     // console.log(recipientId._id);
     if (!recipientId) {
-      return res.status(400).json({
+      return res.status(201).json({
         success: false,
         message: "Recipient not found",
       });
@@ -111,10 +128,15 @@ app.put("/add/recipient/:id", async (req, res) => {
       { $addToSet: { recipients: id } }
     );
 
+    const userdata = await UserModel.findById(id, "recipients").populate(
+      "recipients",
+      "name"
+    );
+
     return res.status(200).json({
       success: true,
       message: "Recipient added",
-      data: await UserModel.find(),
+      user: userdata.recipients,
     });
   } catch (error) {
     console.log(error.message);
@@ -131,7 +153,7 @@ app.get("/get/recipients/:id", async (req, res) => {
     );
 
     if (!userData) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(201).json({ message: "User not found" });
     }
 
     return res.status(200).json({
