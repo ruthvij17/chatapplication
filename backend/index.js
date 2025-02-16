@@ -6,6 +6,7 @@ const dotenv = require("dotenv").config();
 const http = require("http");
 const socketIo = require("socket.io");
 const cors = require("cors");
+const { type } = require("os");
 
 const app = express();
 const server = http.createServer(app);
@@ -167,7 +168,7 @@ app.get("/get/recipients/:id", async (req, res) => {
 });
 
 // Get all messeges
-app.get("/get/messages", async (req, res) => {
+app.put("/get/messages", async (req, res) => {
   try {
     const { id, rid } = req.body;
 
@@ -176,17 +177,25 @@ app.get("/get/messages", async (req, res) => {
         { sender: id, receiver: rid },
         { sender: rid, receiver: id },
       ],
-    }).select("sender receiver time content");
+    }).select("sender time content");
+
     if (!data) {
       return res
         .status(400)
         .json({ success: false, message: "No messages found" });
     }
 
+    const messages = data.map((ele) => {
+      const { sender, time, ...rest } = ele._doc; // Destructure and omit sender
+      return ele.sender == id
+        ? { ...rest, type: "send", date: ele.time }
+        : { ...rest, type: "receive", date: ele.time };
+    });
+
     return res.status(200).json({
       success: true,
       message: "The messages are:",
-      data: data,
+      messages,
     });
   } catch (error) {
     console.log(error.message);
@@ -222,7 +231,7 @@ chatIo.on("connection", (socket) => {
       $push: { messages: newMessage._id },
     });
 
-    chatIo.emit("chat" + rid, message);
+    chatIo.emit("chat" + rid, { ...message, id });
   });
 
   // Handle disconnection

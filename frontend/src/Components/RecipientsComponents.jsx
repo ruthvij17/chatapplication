@@ -49,7 +49,7 @@ const RecipientsComponents = ({ recipientDetails, setRecipientDetails }) => {
 
   return (
     <>
-      <div className="w-[20%] flex flex-col overflow-hidden h-full">
+      <div className="min-w-[15%] flex flex-col overflow-hidden h-full">
         <SearchComponent />
         <div
           className="flex flex-col mt-2 h-full overflow-y-auto gap-1"

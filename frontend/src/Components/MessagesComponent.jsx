@@ -28,7 +28,7 @@ const MessagesComponent = (props) => {
             message.type === "send"
               ? "bg-[rgb(68,68,173)] "
               : "bg-[rgb(107,107,131)] "
-          } rounded-xl p-1 px-2 w-fit text-white max-w-[60%] flex flex-col`}
+          } rounded-xl p-1 px-2 w-fit text-white max-w-[60%] flex flex-col break-words`}
         >
           {message.content}
           <span
