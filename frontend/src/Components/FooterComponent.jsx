@@ -8,7 +8,7 @@ const FooterComponent = () => {
     <>
       <div className="flex flex-col text-white h-[50%] w-[240px] m-3">
         <h1 className="text-2xl font-serif bg-gradient-to-b from-white to-black bg-clip-text text-transparent">
-          Developers Details:
+          Developers:
         </h1>
         <hr className="border-t-1 border-gray-400" />
         <div className="">
